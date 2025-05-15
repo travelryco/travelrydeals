@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #1e9142; /* Green */
+  --primary-dark: #157a33;
+  --secondary: #ff7a22; /* Orange */
+  --secondary-dark: #e86410;
+  --dark: #121212; /* Deep black */
+  --light: #ffffff; /* White */
+  --gray-light: #f5f5f5;
+  --gray-medium: #e0e0e0;
+  --text-primary: #121212;
+  --text-secondary: #444444;
+  --text-light: #ffffff;
+  --text-muted: #666666;
+}
+
+@theme inline {
+  --color-background: var(--light);
+  --color-foreground: var(--dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Placeholder image for broken images */
+.img-placeholder {
+  background-color: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  position: relative;
+}
+
+.img-placeholder::before {
+  content: "Image unavailable";
+  font-size: 0.875rem;
+  position: absolute;
+}
+
+/* Typography */
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+    color: var(--text-primary);
+    background-color: var(--light);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 600;
+  }
+
+  select, input, textarea {
+    @apply text-black border border-gray-300 rounded-md px-3 py-2;
+    background-color: white;
+  }
+
+  select:focus, input:focus, textarea:focus {
+    @apply outline-none ring-2 ring-primary border-primary;
+  }
+
+  label {
+    @apply block text-sm font-medium mb-1 text-black;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply px-4 py-2 rounded-md text-white font-medium transition duration-150;
+    background-color: var(--primary);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 rounded-md text-white font-medium transition duration-150;
+    background-color: var(--secondary);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--secondary-dark);
+  }
+  
+  /* For dark sections */
+  .bg-theme-dark {
+    background-color: var(--dark);
+    color: var(--text-light);
+  }
+  
+  /* Card styling */
+  .card {
+    @apply rounded-lg shadow-lg overflow-hidden bg-white border border-gray-100 transition duration-150;
+  }
+
+  .card:hover {
+    @apply shadow-xl border-gray-200;
+  }
+
+  /* Form elements */
+  .form-control {
+    @apply mb-4;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-black mb-1;
+  }
+
+  .form-input {
+    @apply block w-full px-3 py-2 text-black border border-gray-300 rounded-md;
+  }
+
+  .form-select {
+    @apply block w-full pl-3 pr-10 py-2 text-black border border-gray-300 rounded-md;
+  }
+}
