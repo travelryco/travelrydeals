@@ -12,21 +12,7 @@ type Props = {
   };
 };
 
-export function generateMetadata({ params }: Props) {
-  const deal = getDealById(parseInt(params.id));
-  
-  if (!deal) {
-    return {
-      title: "Deal Not Found - Travelry Deals",
-      description: "The requested deal could not be found.",
-    };
-  }
-
-  return {
-    title: `${deal.title} - Travelry Deals`,
-    description: `Exclusive deal: ${deal.title} in ${deal.location} for only ${deal.price} - Save ${deal.discount}!`,
-  };
-}
+// The generateMetadata function has been moved to metadata.ts file
 
 export default function DealPage({ params }: Props) {
   const [deal, setDeal] = useState<Deal | null>(null);
@@ -34,13 +20,17 @@ export default function DealPage({ params }: Props) {
 
   useEffect(() => {
     const dealId = parseInt(params.id);
-    const foundDeal = getDealById(dealId);
+    const fetchDeal = async () => {
+      const foundDeal = await getDealById(dealId);
+      
+      if (foundDeal) {
+        setDeal(foundDeal);
+      }
+      
+      setLoading(false);
+    };
     
-    if (foundDeal) {
-      setDeal(foundDeal);
-    }
-    
-    setLoading(false);
+    fetchDeal();
   }, [params.id]);
 
   if (loading) {
@@ -88,7 +78,7 @@ export default function DealPage({ params }: Props) {
             </div>
             <div className="mt-4 flex items-center lg:mt-0">
               <span className="text-3xl font-bold text-gray-900">{deal.price}</span>
-              <span className="ml-2 text-lg line-through text-gray-500">{deal.originalPrice}</span>
+              <span className="ml-2 text-lg line-through text-gray-500">{deal.original_price}</span>
               <span className="ml-4 bg-red-600 text-white px-3 py-1 rounded-md text-sm font-medium">
                 {deal.discount} OFF
               </span>
@@ -111,9 +101,9 @@ export default function DealPage({ params }: Props) {
               />
             </div>
             
-            {deal.additionalImages && (
+            {deal.additional_images && (
               <div className="mt-4 grid grid-cols-3 gap-4">
-                {deal.additionalImages.map((img, idx) => (
+                {deal.additional_images.map((img: string, idx: number) => (
                   <div key={idx} className="relative h-32 rounded-lg overflow-hidden">
                     <Image 
                       src={img} 
@@ -148,7 +138,7 @@ export default function DealPage({ params }: Props) {
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <p className="text-sm text-gray-500">Max Guests</p>
-                    <p className="text-lg font-medium text-gray-900">{deal.maxGuests}</p>
+                    <p className="text-lg font-medium text-gray-900">{deal.max_guests}</p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <p className="text-sm text-gray-500">Type</p>
@@ -163,7 +153,7 @@ export default function DealPage({ params }: Props) {
               <div className="mt-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Amenities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4">
-                  {deal.amenities.map((amenity, idx) => (
+                  {deal.amenities.map((amenity: string, idx: number) => (
                     <div key={idx} className="flex items-center">
                       <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -184,10 +174,10 @@ export default function DealPage({ params }: Props) {
                     <p className="text-sm text-gray-500">Duration</p>
                     <p className="text-lg font-medium text-gray-900">{deal.duration}</p>
                   </div>
-                  {deal.maxParticipants && (
+                  {deal.max_participants && (
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">Max Participants</p>
-                      <p className="text-lg font-medium text-gray-900">{deal.maxParticipants}</p>
+                      <p className="text-lg font-medium text-gray-900">{deal.max_participants}</p>
                     </div>
                   )}
                 </div>
@@ -199,7 +189,7 @@ export default function DealPage({ params }: Props) {
               <div className="mt-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">What's Included</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4">
-                  {deal.included.map((item, idx) => (
+                  {deal.included.map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center">
                       <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -216,7 +206,7 @@ export default function DealPage({ params }: Props) {
               <div className="mt-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Requirements</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4">
-                  {deal.requirements.map((req, idx) => (
+                  {deal.requirements.map((req: string, idx: number) => (
                     <div key={idx} className="flex items-center">
                       <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -239,7 +229,7 @@ export default function DealPage({ params }: Props) {
                   <span className="text-sm text-gray-500">Price</span>
                   <div className="flex items-baseline">
                     <span className="text-2xl font-bold text-primary">{deal.price}</span>
-                    <span className="ml-2 text-sm line-through text-gray-500">{deal.originalPrice}</span>
+                    <span className="ml-2 text-sm line-through text-gray-500">{deal.original_price}</span>
                   </div>
                 </div>
                 <div className="bg-secondary text-white font-semibold px-2 py-1 rounded text-sm">
@@ -278,7 +268,7 @@ export default function DealPage({ params }: Props) {
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
-                    {deal.category === "Accommodation" && deal.maxGuests && deal.maxGuests > 4 && (
+                    {deal.category === "Accommodation" && deal.max_guests && deal.max_guests > 4 && (
                       <option>5+</option>
                     )}
                   </select>
