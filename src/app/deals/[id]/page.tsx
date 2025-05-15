@@ -2,19 +2,17 @@ import { getDealById } from "@/lib/deals";
 import DealClientPage from "./DealClientPage";
 import { notFound } from "next/navigation";
 
-// Use proper Next.js types for pages
-type PageParams = {
-  id: string;
-}
-
-export default async function DealPage({ params }: { params: PageParams }) {
+// Next.js page component with dynamic route params
+export default async function Page({ params }: { params: { id: string } }) {
+  // Get the deal data
   const dealId = parseInt(params.id);
   const deal = await getDealById(dealId);
   
+  // Handle not found case
   if (!deal) {
     notFound();
   }
   
-  // Pass fetched data to client component
+  // Render the client component with the data
   return <DealClientPage deal={deal} />;
 } 
