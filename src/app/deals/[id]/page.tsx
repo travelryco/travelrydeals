@@ -6,15 +6,16 @@ import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Deal, getDealById } from "@/lib/deals";
 
-type Props = {
+// Use correct params type for client components
+interface DealPageProps {
   params: {
     id: string;
   };
-};
+}
 
 // The generateMetadata function has been moved to metadata.ts file
 
-export default function DealPage({ params }: Props) {
+export default function DealPage({ params }: DealPageProps) {
   const [deal, setDeal] = useState<Deal | null>(null);
   const [loading, setLoading] = useState(true);
 
